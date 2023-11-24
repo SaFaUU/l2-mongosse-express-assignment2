@@ -1,16 +1,26 @@
 import { Request, Response } from 'express'
 import UserServices from './user.service'
 import User from './user.model'
+import { userValidation, orderValidation } from './user.validation'
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const userData = req.body
-    const result = await UserServices.createUserDB(userData)
-    res.status(200).json({
-      success: true,
-      message: 'User created successfully!',
-      data: result,
-    })
+    const { error, value } = userValidation.validate(userData)
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error,
+      })
+    } else {
+      const result = await UserServices.createUserDB(userData)
+      res.status(200).json({
+        success: true,
+        message: 'User created successfully!',
+        data: result,
+      })
+    }
   } catch (err: any) {
     res.status(500).json({
       success: false,
@@ -91,15 +101,24 @@ const updateSingleUser = async (req: Request, res: Response) => {
     if (!(await User.isUserExists(Number(userId)))) {
       throw new Error('User not found!')
     }
-    const result = await UserServices.updateSingleUserFromDB(
-      Number(userId),
-      req.body,
-    )
-    res.status(200).json({
-      success: true,
-      message: 'User updated successfully!',
-      data: result,
-    })
+    const { error, value } = userValidation.validate(req.body)
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error,
+      })
+    } else {
+      const result = await UserServices.updateSingleUserFromDB(
+        Number(userId),
+        req.body,
+      )
+      res.status(200).json({
+        success: true,
+        message: 'User updated successfully!',
+        data: result,
+      })
+    }
   } catch (err: any) {
     res.status(404).json({
       success: false,
@@ -118,13 +137,23 @@ const addProduct = async (req: Request, res: Response) => {
     if (!(await User.isUserExists(Number(userId)))) {
       throw new Error('User not found!')
     }
-    await UserServices.addProductDB(Number(userId), req.body)
+    console.log(req.body)
+    const { error, value } = orderValidation.validate(req.body)
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error,
+      })
+    } else {
+      await UserServices.addProductDB(Number(userId), req.body)
 
-    res.status(200).json({
-      success: true,
-      message: 'Order created successfully!',
-      data: null,
-    })
+      res.status(200).json({
+        success: true,
+        message: 'Order created successfully!',
+        data: null,
+      })
+    }
   } catch (err: any) {
     res.status(404).json({
       success: false,

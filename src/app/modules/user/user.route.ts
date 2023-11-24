@@ -13,8 +13,8 @@ router
 
 // Order Management
 router
-  .put('/:userId/orders', UserControllers.addProduct)
   .get('/:userId/orders', UserControllers.getOrders)
+  .put('/:userId/orders', UserControllers.addProduct)
   .get('/:userId/orders/total-price', UserControllers.getOrdersTotal)
 
 export const UserRoutes = router
