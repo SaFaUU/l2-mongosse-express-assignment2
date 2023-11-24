@@ -1,3 +1,5 @@
+import { Model } from 'mongoose'
+
 export type TAdress = {
   street: string
   city: string
@@ -25,4 +27,9 @@ export type TUser = {
   hobbies: string[]
   address: TAdress
   orders?: TOrderObject[]
+}
+
+export interface UserModel extends Model<TUser> {
+  // eslint-disable-next-line no-unused-vars
+  isUserExists(id: number): Promise<TUser | null>
 }
