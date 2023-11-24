@@ -63,7 +63,16 @@ const getOrdersTotalDB = async (userId: number) => {
       $unwind: '$orders',
     },
     {
-      $group: { _id: '$orders.price', count: { $sum: '$orders.price' } },
+      $group: {
+        _id: '$_id',
+        totalAmount: { $sum: '$orders.price' },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        totalAmount: 1,
+      },
     },
   ])
 
