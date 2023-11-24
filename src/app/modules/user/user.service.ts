@@ -45,6 +45,31 @@ const addProductDB = async (userId: number, userData: TUser) => {
   return result
 }
 
+const getOrdersFromDB = async (userId: number) => {
+  const result = await User.find({ userId }).select(
+    '-orders._id -_id -userId -username -fullName -age -createdAt -updatedAt -__v -hobbies -address -email -isActive',
+  )
+
+  return result
+}
+const getOrdersTotalDB = async (userId: number) => {
+  const result = await User.aggregate([
+    {
+      $match: {
+        userId,
+      },
+    },
+    {
+      $unwind: '$orders',
+    },
+    {
+      $group: { _id: '$orders.price', count: { $sum: '$orders.price' } },
+    },
+  ])
+
+  return result
+}
+
 const UserServices = {
   createUserDB,
   getUserFromDB,
@@ -52,5 +77,7 @@ const UserServices = {
   deleteSingleUserFromDB,
   updateSingleUserFromDB,
   addProductDB,
+  getOrdersFromDB,
+  getOrdersTotalDB,
 }
 export default UserServices

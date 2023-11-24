@@ -12,6 +12,9 @@ router
   .put('/:userId', UserControllers.updateSingleUser)
 
 // Order Management
-router.put('/:userId/orders', UserControllers.addProduct)
+router
+  .put('/:userId/orders', UserControllers.addProduct)
+  .get('/:userId/orders', UserControllers.getOrders)
+  .get('/:userId/orders/total-price', UserControllers.getOrdersTotal)
 
 export const UserRoutes = router
