@@ -1,4 +1,4 @@
-import { Schema, UpdateQuery, model } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import {
   TAdress,
   TFullName,
@@ -80,6 +80,7 @@ userSchema.pre('save', async function (next) {
   next()
 })
 userSchema.pre('findOneAndUpdate', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data: any = this.getUpdate()
   if (data.password) {
     data.password = await bcrypt.hash(

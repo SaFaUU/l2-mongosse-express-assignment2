@@ -33,6 +33,17 @@ const updateSingleUserFromDB = async (userId: number, userData: TUser) => {
   ).select('-_id -fullName._id -createdAt -updatedAt -__v -orders -address._id')
   return result
 }
+const addProductDB = async (userId: number, userData: TUser) => {
+  const result = await User.findOneAndUpdate(
+    { userId },
+    {
+      $addToSet: {
+        orders: userData,
+      },
+    },
+  )
+  return result
+}
 
 const UserServices = {
   createUserDB,
@@ -40,5 +51,6 @@ const UserServices = {
   getSingleUserFromDB,
   deleteSingleUserFromDB,
   updateSingleUserFromDB,
+  addProductDB,
 }
 export default UserServices

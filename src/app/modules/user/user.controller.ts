@@ -111,10 +111,36 @@ const updateSingleUser = async (req: Request, res: Response) => {
     })
   }
 }
+
+const addProduct = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId
+    if (!(await User.isUserExists(Number(userId)))) {
+      throw new Error('User not found!')
+    }
+    await UserServices.addProductDB(Number(userId), req.body)
+
+    res.status(200).json({
+      success: true,
+      message: 'Order created successfully!',
+      data: null,
+    })
+  } catch (err: any) {
+    res.status(404).json({
+      success: false,
+      message: err.message || 'Something went wrong',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    })
+  }
+}
 export const UserControllers = {
   createUser,
   getUsers,
   getSingleUser,
   deleteSingleUser,
   updateSingleUser,
+  addProduct,
 }
