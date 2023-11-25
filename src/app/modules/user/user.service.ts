@@ -3,7 +3,18 @@ import User from './user.model'
 
 const createUserDB = async (userData: TUser) => {
   const result = await User.create(userData)
-  return result
+
+  const sanitizedResult = result.toObject()
+  delete (sanitizedResult as any).orders
+  delete (sanitizedResult as any).password
+  delete (sanitizedResult as any).fullName._id
+  delete (sanitizedResult as any).address._id
+  delete (sanitizedResult as any)._id
+  delete (sanitizedResult as any).createdAt
+  delete (sanitizedResult as any).updatedAt
+  delete (sanitizedResult as any).__v
+
+  return sanitizedResult
 }
 const getUserFromDB = async () => {
   const result = await User.find({}).select(

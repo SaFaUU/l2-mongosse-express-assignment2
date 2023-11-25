@@ -6,7 +6,7 @@ import { userValidation, orderValidation } from './user.validation'
 const createUser = async (req: Request, res: Response) => {
   try {
     const userData = req.body
-    const { error, value } = userValidation.validate(userData)
+    const { error } = userValidation.validate(userData)
     if (error) {
       res.status(500).json({
         success: false,
@@ -101,7 +101,7 @@ const updateSingleUser = async (req: Request, res: Response) => {
     if (!(await User.isUserExists(Number(userId)))) {
       throw new Error('User not found!')
     }
-    const { error, value } = userValidation.validate(req.body)
+    const { error } = userValidation.validate(req.body)
     if (error) {
       res.status(500).json({
         success: false,
@@ -138,7 +138,7 @@ const addProduct = async (req: Request, res: Response) => {
       throw new Error('User not found!')
     }
     console.log(req.body)
-    const { error, value } = orderValidation.validate(req.body)
+    const { error } = orderValidation.validate(req.body)
     if (error) {
       res.status(500).json({
         success: false,
