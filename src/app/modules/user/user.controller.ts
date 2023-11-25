@@ -137,7 +137,6 @@ const addProduct = async (req: Request, res: Response) => {
     if (!(await User.isUserExists(Number(userId)))) {
       throw new Error('User not found!')
     }
-    console.log(req.body)
     const { error } = orderValidation.validate(req.body)
     if (error) {
       res.status(500).json({
